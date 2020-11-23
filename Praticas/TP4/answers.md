@@ -49,7 +49,7 @@ get_fastest_path(Start, End, Sol) :-
     nth0(0, L, Sol).
 ```
 
-**3)**
+**3.**
 
 ```pl
 pathContains(List, Path) :-
@@ -65,13 +65,50 @@ all_member([X|Rest], Path) :-
 all_member([], Path, Path).
 ```
 
-**4)**
+**4.**
 
 ```pl
 getAllPaths(Start, End, Paths) :-
     findall(Path, resolva_prof(Start, End, Path), Paths).
 ```
 
+**5.**
+
+**a)**
 
 
-    
+**b)**
+
+
+**6.**
+
+**a)**
+
+```pl
+connected(X, Y) :-
+    ligacao(X, Y);
+    ligacao(Y, X).
+
+path(Start, End, Path) :-
+    path(Start, End, [Start], Path, 5).
+
+path(Start, End, List, FinalList, _) :-
+    connected(Start, End),
+    append(List, [End], FinalList).
+
+path(Start, End, List, FinalList, N) :-
+    N > 0,
+    connected(Start, Intermediate),
+    Intermediate \= End,
+    \+ member(Intermediate, List),
+    append(List, Intermediate, NewList),
+    N1 is N - 1,
+    path(Intermediate, End, NewList, FinalList, N1).
+```
+
+**b)**
+
+```
+ciclos(Node, Comp, List):-
+    findall(Cicle, path(Node, Node, [], Cicle, Comp), List).
+```
