@@ -1,8 +1,21 @@
-**1.**
+:-use_module(library(lists)). 
+ligado(a,b). 
+ligado(f,i).
+ligado(a,c). 
+ligado(f,j).
+ligado(b,d). 
+ligado(f,k).
+ligado(b,e). 
+ligado(g,l).
+ligado(b,f). 
+ligado(g,m).
+ligado(c,g). 
+ligado(k,n).
+ligado(d,h). 
+ligado(l,o).
+ligado(d,i). 
+ligado(i,f).  
 
-**a)**
-
-```pl
 resolva_prof(Start, End, Sol) :-
     resolva_prof(Start, End, [Start], Sol).
 
@@ -13,11 +26,7 @@ resolva_prof(Start, End, Temp, Sol) :-
     \+ member(Next, Temp),
     append(Temp, [Next], Temp1),
     resolva_prof(Next, End, Temp1, Sol).
-```
-
-**b)**
-
-```pl
+	
 ache_todos(X, Y, Z) :-
     bagof(X, Y, Z), !.
 
@@ -37,41 +46,24 @@ largura([T|Fila], End, Sol) :-
     ache_todos(ExtensaoAteFilho, estende_ate_filho(T, ExtensaoAteFilho), Extensoes),
     append(Fila, Extensoes, FilaExtendida),
     largura(FilaExtendida, End, Sol).
-```
-
-**2.**
-
-```pl
+	
 get_fastest_path(Start, End, Sol) :-
     setof(Tam-Sol1, (resolva_prof(Start, End, Sol1), length(Sol1, Tam)), L),
     write(L),
     nl,
     nth0(0, L, Sol).
-```
-
-**3)**
-
-```pl
+	
 pathContains(List, Path) :-
-    ligado(X, _),
-    ligado(_, Y),
-    resolva_prof(X, Y, Path),
-    all_member(List, Path).
+	ligado(X, _),
+	ligado(_, Y),
+	resolva_prof(X, Y, Path),
+	all_member(List, Path).
 
 all_member([X|Rest], Path) :-
-    member(X, Path),
-    all_member(Rest, Path).
+	member(X, Path),
+	all_member(Rest, Path).
 
 all_member([], Path, Path).
-```
 
-**4)**
-
-```pl
 getAllPaths(Start, End, Paths) :-
     findall(Path, resolva_prof(Start, End, Path), Paths).
-```
-
-
-
-    
