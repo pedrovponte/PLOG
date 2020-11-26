@@ -36,6 +36,8 @@ b) Track:
 
 Retrocede-se do 3º para o 2º objetivo 3 vezes.
 
+----
+
 **2.**
 
 ```
@@ -50,7 +52,11 @@ c(X,Y). => X=a1, Y=b1?
 d(X,Y). => X=a1,Y=2?
 ```
 
+----
+
 **3.** ![](ex3.png)
+
+----
 
 **4.**
 

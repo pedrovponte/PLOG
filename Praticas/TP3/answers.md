@@ -12,12 +12,16 @@
 **k)** H = apple, T = [_01], Z = _01
 **l)** yes
 
+----
+
 **3.**
 
 ```pl
 append1([], Y, Y).
 append1([X|Xs], Ys, [X|Z]) :- append1(Xs, Ys, Z).
 ```
+
+----
 
 **4.**
 
@@ -28,6 +32,8 @@ rev([H|T], S, R) :-
        rev(T, [H|S], R).
 rev([], R, R).
 ```
+
+----
 
 **5.**
 **a)** 
@@ -54,6 +60,8 @@ nth_member(N, [_ | T], M) :-
     N1 is N-1
     nth_member(N1, T, M).
 ```
+
+----
 
 **6.**
 
@@ -92,6 +100,8 @@ delete_all_list(LX, [X|L1], Res) :-
        delete_all_list(LX, L1, Res).
 ```
 
+----
+
 **7.**
 
 ```pl
@@ -99,6 +109,8 @@ before(L1, L2, L) :-
        append(_, [L1|X], L),
        append(_, [L2|_], L3).
 ```
+
+----
 
 **8.**
 
@@ -129,6 +141,8 @@ conta_elem(X, [Y|L], N) :-
 conta_elem(X, [], 0).
 ```
 
+----
+
 **9.**
 
 ```pl
@@ -140,6 +154,8 @@ substitui(X, Y, [Z|L1], [Z|L2]) :-
 
 substitui(X, Y, [], []).
 ```
+
+----
 
 **10.**
 
@@ -187,6 +203,8 @@ delete_val(X, L1, Res) :-
        append(L2, L3, Res).
 ```
 
+----
+
 **11.**
 
 ```pl
@@ -199,6 +217,8 @@ achata_lista([H|T], L) :-
        achata_lista(T, L2),
        append(L1, L2, L).
 ```
+
+----
 
 **13.**
 

@@ -39,6 +39,8 @@ largura([T|Fila], End, Sol) :-
     largura(FilaExtendida, End, Sol).
 ```
 
+----
+
 **2.**
 
 ```pl
@@ -48,6 +50,8 @@ get_fastest_path(Start, End, Sol) :-
     nl,
     nth0(0, L, Sol).
 ```
+
+----
 
 **3.**
 
@@ -65,12 +69,16 @@ all_member([X|Rest], Path) :-
 all_member([], Path, Path).
 ```
 
+----
+
 **4.**
 
 ```pl
 getAllPaths(Start, End, Paths) :-
     findall(Path, resolva_prof(Start, End, Path), Paths).
 ```
+
+----
 
 **5.**
 
@@ -79,6 +87,7 @@ getAllPaths(Start, End, Paths) :-
 
 **b)**
 
+----
 
 **6.**
 
