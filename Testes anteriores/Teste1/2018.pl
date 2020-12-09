@@ -21,9 +21,13 @@ flight('FR5484', 'LEMD', 'LPPR', 1935, 105, 'RYR').
 flight('AF1024', 'LFPG', 'LPPT', 940, 155, 'AFR').
 flight('AF1025', 'LPPT', 'LFPG', 1310, 155, 'AFR').
 
+% 1----------------------------------------------------
+
 short(Flight) :-
     flight(Flight, _, _, _, Duration, Company),
     Duration < 90.
+	
+% 2----------------------------------------------------------------------
 	
 shorter(Flight1, Flight2, Flight1) :-
     flight(Flight1, _, _, _, Duration1, _),
@@ -35,6 +39,8 @@ shorter(Flight1, Flight2, Flight2) :-
     flight(Flight2, _, _, _, Duration2, _),
     Duration2 < Duration1.
 	
+% 3------------------------------------------------------------------------
+	
 arrivalTime(Flight, ArrivalTime) :-
     flight(Flight, _, _, DepartureTime, Duration, _),
     DepMinutes is DepartureTime mod 100,
@@ -43,33 +49,65 @@ arrivalTime(Flight, ArrivalTime) :-
     Hours is TotMinutes // 60,
     ArrivalTime is DepartureTime + Hours * 100 - DepMinutes + Minutes.
 	
+% 4-------------------------------------------------------------------------
 	
 opera(Company, Country) :-
-    flight(_, Id, _, _, _, Company),
-    airport(_, Id, Country).
-
-opera(Company, Country) :-
-    flight(_, _, Id, _, _, Company),
-    airport(_, Id, Country).
-
+	flight(_, Origin, Destiny, _, _, Company),
+	(airport(_, Origin, Country); airport(_, Destiny, Country)).
+	
 countries(Company, ListOfCountries) :-
-    airport(_, _, Country),
-    opera(Company, Country),
-    append(Country, ListOfCountries, ListOfCountries).
+	countriesAux(Company, [], ListOfCountries).
 	
+countriesAux(Company, AccListOfCountries, ListOfCountries) :-
+	opera(Company, Country),
+	\+ member(Country, AccListOfCountries),
+	append(AccListOfCountries, [Country], NewAccListOfCountries),
+	countriesAux(Company, NewAccListOfCountries, ListOfCountries),!.
+	
+countriesAux(_, ListOfCountries, ListOfCountries).
+	
+% 5--------------------------------------------------------------------------
 	
 pairableFlights :-
-    flight(Id1, Origin, Destination, DepartureTime, Duration, _),
-    flight(Id2, Destination, Destination2, DepartureTime2, Duration2, _),
+    flight(Id1, _, Destination, _, _, _),
+    flight(Id2, Destination, _, DepartureTime2, _, _),
     arrivalTime(Id1, T1),
-    Diff is abs(DepartureTime2 - T1),
-	DiffHours is Diff // 100,
-	DiffMinutes is Diff mod 100,
-	DiffTime is DiffHours * 60 + DiffMinutes,
+	ArrivalTimeMinutes is (T1 // 100) * 60 + (T1 mod 100),
+	FinalHourMinutes  is (DepartureTime2 // 100) * 60 + (DepartureTime2 mod 100),
+	DiffTime is FinalHourMinutes - ArrivalTimeMinutes,
     DiffTime >= 30,
     DiffTime =< 90,
     write(Destination), write(' - '), write(Id1), write(' \\ '), write(Id2), nl,
     fail.
+
+pairableFlights.
+
+% 6----------------------------------------------------------------------------
+
+new_pairable(InitialTime, TempoPartida, 0) :-
+	InitialTimeMinutes is (InitialTime // 100) * 60 + (InitialTime mod 100),
+	TempoPartidaMinutes is (TempoPartida // 100) * 60 + (TempoPartida mod 100),
+	Difference is TempoPartidaMinutes - InitialTimeMinutes,
+	Difference >= 30, !.
+	
+new_pairable(InitialTime, TempoPartida, 1) :-
+	InitialTimeMinutes is (InitialTime // 100) * 60 + (InitialTime mod 100),
+	TempoPartidaMinutes is (TempoPartida // 100) * 60 + (TempoPartida mod 100),
+	Difference is TempoPartidaMinutes - InitialTimeMinutes,
+	Difference < 0.
+
+tripDays([_], _, [], 1).
+
+tripDays([Origem, Destino | Trip], Time, [TempoPartida | FlightTimes], Days) :-
+		airport(_, ICAO1, Origem),
+		airport(_, ICAO2, Destino),
+		flight(Designation, ICAO1, ICAO2, TempoPartida, _, _),
+		new_pairable(Time, TempoPartida, DaysWasted),
+		arrivalTime(Designation, ArrivalTime),
+		tripDays([Destino | Trip], ArrivalTime, FlightTimes, PreviouDays),
+		Days is PreviouDays + DaysWasted.
+
+% 7-------------------------------------------------------------------------------
 	
 :- use_module(library(lists)).
 
@@ -80,15 +118,38 @@ avgFlightLenghtFromAirport(Airport, AvgLenght) :-
     AvgLenght is Total / N.
 	
 	
+% 8--------------------------------------------------------------------------------
+
+mostInternational(ListOfCompanies) :-
+	setof(
+		Count,
+		(
+			company(C, _, _, _),
+			countries(Company, Countries),
+			length(Countries, Count)
+		),
+		Counts
+	),
+	reverse(Counts, [MaxCount | _]),
+	findall(
+		Company,
+		(
+			company(C, _, _, _),
+			countries(Company, Countries),
+			length(Countries, MaxCount)
+		),
+		ListOfCompanies
+	), !.
+	
+% 9---------------------------------------------------------------------------------
+	
 dif_max_2(X,Y) :- X < Y, X >= Y - 2.
 	
 	
 make_pairs(L, P, [X-Y|Zs]) :-
     select(X, L, L2),
     select(Y, L2, L3),
-    G =.. [P, X, Y], G.
+    G =.. [P, X, Y], G,
+	make_pairs(L3, P, Zs).
 
-make_pairs(L, P, [X-Y|Zs]) :-
-    select(_X, L, L2),
-    select(Y, L2, L3),
-    make_pairs(L3, P, Zs).
+make_pairs([], _, []).
