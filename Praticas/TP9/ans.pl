@@ -1,30 +1,23 @@
-### PLS
+:-use_module(library(clpfd)).
+:-use_module(library(lists)). 
 
-**1.**
+solve(Total):-
+    Total = [Joao, Antonio, Francisco, Harpa, Violino, Piano, Terca, Quinta1, Quinta2], 
+    Pessoas = [Joao, Antonio, Francisco], 
+    Instrumento = [Harpa, Violino, Piano],       
+    Ensaio = [Terca, Quinta1, Quinta2],  
+    domain(Total, 1,3),  
+    all_distinct(Pessoas),
+    all_distinct(Instrumento),
+    all_distinct(Ensaio), 
+    Antonio #\= Piano,   
+    Piano #= Terca, 
+    Joao #\= Violino,  
+    Joao #\= Piano,    
+    Joao #= Quinta1, 
+    Violino #= Quinta2, 
+    labeling([], Total). 
 
-----
-
-**2.**
-
-```pl
-solve(Total) :-
-    Total = [Joao, Antonio, Francisco, Harpa, Violino, Piano, Terça, Quinta, Quinta2],
-    Pessoas = [Joao, Antonio, Francisco],
-    Instrumentos = [Harpa, Violino, Piano],
-    Ensaio = [Terça, Quinta, Quinta2],
-    Antonio #\= Piano,
-    Piano #= Terça,
-    Joao #\= Quinta,
-    Joao #\= Violino,
-    Violino #= Quinta2,
-    Joao #\= Piano,
-    labelling([], Total),
-    write('Result: ', Total).
-```
-
-**3.**
-
-```pl
 compras(Total) :-
     Total = [Adams, Baker, Catt, Dodge, Ennis, Fisk, Livro, Vestido, Bolsa, Gravata, Chapeu, Candeeiro, AndarTerreo, Segundo1, Segundo2, Terceiro, Quinto, Sexto],
     Pessoas = [Adams, Baker, Catt, Dodge, Ennis, Fisk],
@@ -46,61 +39,7 @@ compras(Total) :-
     Baker #\= Gravata,
     Ennis #= Candeeiro,
     labeling([], Total),
-    write("TOTAL: " + Total).
-```
-
-----
-
-**4.**
-
-**a)** Se não fosse segunda-feira, ele estaria a mentir ao fazer a afirmação, o que contraria a hipótese de ele só mentir às segundas. Assim,fica bem estabelecido que era segunda feira. Sendo este dia, ele mentiu ao afirmar: "hoje é segunda-feira e sou casado". Portanto, a proposição atómica "sou casado" é falsa.
-
-**b)** "A quantidade de dias entre hoje e o proximo domingo e um fator primo de dez"
-
-**c)** Isto não pode ter sido dito na segunda-feira. Quem disse isto falou a verdade, logo nao pode ter sido o Jal, já que às segundas ele só mente. Todavia, Tak também não podia falar assim, pois uma semana após é a próxima segunda feira e Tak não mente tanto na segunda como na terça-feira.
-Não sendo segunda-feira, quem afirmou mentiu, pois o único dia anterior a terça-feira é segunda-feira. Logo, foi Tak que mentiu: era portanto 
-quinta-feira.
-
-**d)** "Amanhã é terça-feira" não pode ter sido dito na segunda-feira pelo Jal, pois o dia seguinte a segunda é terça-feira. Logo, se tivesse dito isso estaria a dizer a verdade no dia em que só mente. Deste modo, quem disse esta primeira frase foi o Tak.
-Passada uma semana, o outro irmão, ou seja, o Jal, disse "Amanhã estarei mentindo". Ora, considerando que o Jal só mente à segunda, e uma semana antes o seu irmão tinha falado a verdade ao dizer que o dia seguinte era terça, então eram segundas feiras quando isto foi dito.
-
-**e)** Os habitantes da ilha podem processar o(s) acusador(es) por danos morais... 
-Com efeito, imagine-se que há uma pessoa "A" que mente num dia da semana.
-Tome-se o seu "antipoda" "A'" que mente todos os dias em que "A" fala a verdade e fala a verdade no dia em que "A" mente. Para os dois juntos não
-haverá um único dia em que ambos falarão a verdade e, portanto, haverá um
-habitante "C" que mentirá todos os dias. Seja "C'" o antipoda de "C". Este
-antipoda fala a verdade todos os dias, contrariando assim as más linguas.
-
-----
-
-**5.**
-
-```pl
-
-% 1 - azul
-% 2 - amarelo
-% 3 - verde
-% 4 - preto
-
-% semaforo <-------------------->
-%          depois          antes
-
-carros:-
-    Cor = [ A, B, C, D ],    %posição = posição na fila; valor é cor
-    Tam = [ E, F, G, H ],   %
-    domain(Cor, 1, 4), domain(Tam, 1, 4), all_distinct(Cor), all_distinct(Tam),
-    element(Index, Cor, 3), element(Index, Tam, 1),  % verde é menor
-    
-    element(I, Cor, 1), IndAntesAz #= I+1, IndDepoisAz #= I-1, % I é index do azul
-    element(IndDepoisAz, Tam, TamDepois), element(IndAntesAz, Tam, TamAntes),
-    TamAntes #< TamDepois, %imed antes azul menor imed dep azul
-    
-    Index #< I, %verde depois do azul
-    element(Yellow, Cor, 2), element(Black, Cor, 4), Yellow #< Black, %amarelo dep. preto
-    append(Cor, Tam, Vars),
-    labeling([ ], Vars).
-
-----------------------------------------------------------------------
+    write('TOTAL: '), write(Total).
 
 carros :-
     Cor = [Amarelo, Verde, Azul, Preto], % posiçao = posiçao na fila
@@ -120,25 +59,7 @@ carros :-
     append(Cor, Carros, Total),
     labeling([], Total),
     write('FILA: '), write(Cor).
-```
 
-----
-
-**6.**
-
-Se eu perguntar qual é a porta certa ao seu colega, qual é que ele me indicará?
-
-Note-se que obteremos sempre como resposta a porta errada.
-
-• Se perguntarmos ao guarda sincero, ele irá dizer a porta errada pois sabe que o seu colega iria mentir.
-
-• Se perguntarmos ao guarda mentiroso, ele irá dizer a porta errada, pois por si próprio, mentiria o que o seu colega iria dizer: a verdade.
-
-----
-
-**7.**
-
-```pl
 acampamento :-
     Amigos = [Joao, Miguel, Nadia, Silvia, Afonso, Cristina, Geraldo, Julio, Maria, Maximo, Manuel, Ivone],
     Bebidas = [Limonada, Guarana, Whisky, Vinho, Champanhe, Agua, Laranjada, Cafe, Cha, Vermouth, Cerveja, Vodka],
@@ -154,13 +75,7 @@ acampamento :-
     labeling([], Total),
     write('Amigos: '), write(Amigos), nl,
     write('Bebidas: '), write(Bebidas).
-```
 
-----
-
-**8.**
-
-```pl
 restaurante :-
     Pessoas = [Bernard, Daniel, Francisco, Henrique, Jaqueline, Luis],
     Comida = [Peixe, Porco, Pato, Omeleta, Bife, Esparguete],
@@ -180,13 +95,7 @@ restaurante :-
     labeling([], Total),
     write('Pessoas: '), write(Pessoas), nl,
     write('Comida: '), write(Comida).
-```
 
-----
-
-**9.**
-
-```pl
 ciclismo :-
     Corredores = [Carlos, Ricardo, Raul, Tomas, Roberto, Boris, Diego, 
 Luis],
@@ -206,13 +115,7 @@ Luis],
     all_distinct([Luis, Ricardo, Boris, 7, 3, 1, 4, 5]),
     labeling([], Corredores),
     write('Corredores: '), write(Corredores).
-```
 
-----
-
-**10.**
-
-```pl
 eleicoes :-
     Reunioes = [A, B, C, AB, AC, BC, X],
     domain(Reunioes, 1, 200),
@@ -224,13 +127,7 @@ eleicoes :-
     A + B + C + AB + AC + BC + X #= 200,
     labeling([], Reunioes),
     write('Reunioes: '), write(Reunioes).
-```
 
-----
-
-**11.**
-
-```pl
 desporto :-
     Amigos = [Claudio, David, Domingos, Francisco, Marcelo, Paulo],
     Desportos = [Ping, Futebol, Andebol, Rugby, Tenis, Voleibol],
@@ -253,13 +150,7 @@ desporto :-
     labeling([], Total),
     write('Amigos: '), write(Amigos), nl,
     write('Desportos: '), write(Desportos).
-```
 
-----
-
-**12.**
-
-```pl
 biblioteca :-
     Compartimentos = [ComumInglesHistoria, ComumInglesLiteratura, 
                     DuraInglesHistoria, DuraInglesLiteratura, 
@@ -277,13 +168,7 @@ biblioteca :-
     labeling([], Compartimentos),
     sumlist(Compartimentos, X),
     write('Compartimentos: '), write(X).
-```
 
-----
-
-**13.**
-
-```pl
 automoveis :-
     Nacionalidades = [Alemao, Ingles, Brasileiro, Espanhol, Italiano, Francês],
     LaVie = [L1, L2],
@@ -309,17 +194,7 @@ automoveis :-
     labeling([], Total),
     write('Nacionalidades: '), write(Nacionalidades), nl,
     write('Marcas: '), write(Marcas).
-```
 
-**14.**
-
-```pl
-
-```
-
-**15.**
-
-```pl
 entregas :-
     Nome = [Paula, Artur, Daniel, Ema],
     Sobrenome = [Mala, Postal, Bola, Famoso],
@@ -327,7 +202,7 @@ entregas :-
     Encomenda = [Roupas, Catalogo, Plantas, Livro],
     domain(Nome, 1, 4),
     domain(Sobrenome, 1, 4),
-    domain(Morada, 1, 4),
+    domain(Morada, 1, 5),
     domain(Encomenda, 1, 4),
     all_distinct(Nome),
     all_distinct(Sobrenome),
@@ -335,7 +210,6 @@ entregas :-
     all_distinct(Encomenda),
     Mala #= Roupas,
     Paula #= Postal, 
-    Paula #\= Bola,
     Paula #\= Espanha,
     Bola #\= Espanha,
     Paula #\= Catalogo,
@@ -355,13 +229,9 @@ entregas :-
     write('Sobrenome: '), write(Sobrenome), nl,
     write('Morada: '), write(Morada), nl,
     write('Encomenda: '), write(Encomenda).
-```
 
-**16.**
-
-```pl
 produto :-
-    Variaveis = [Interrogados, Liquido, Po, LiquidoPo, NaoUtiliza],
+    Variaveis = [Interrogadas, Liquido, Po, LiquidoPo, NaoUtiliza],
     domain(Variaveis, 0, 10000),
     Interrogadas #= Liquido + Po + LiquidoPo + NaoUtiliza,
     (1 * Interrogadas) / 3 #= Liquido + NaoUtiliza,
@@ -370,19 +240,10 @@ produto :-
     NaoUtiliza #= (1 * Interrogadas) / 5,
     labeling([], Variaveis),
     write('Variaveis: '), write(Variaveis).
-```
-
-**17.**
-
-```pl
-% 1 - azul
-% 2 - amarelo
-% 3 - verdes
-% 4 - vermelhos
 
 carros2 :-
     length(Carros, 12),
-    global-cardinality(Carros, [2-4, 3-2, 4-3, 1-3]),
+    global_cardinality(Carros, [2-4, 3-2, 4-3, 1-3]),
     element(1, Carros, X),
     element(12, Carros, X),
     element(2, Carros, Y),
@@ -391,7 +252,7 @@ carros2 :-
     three_different(Carros),
     only_once(Carros, 1),
     labeling([], Carros),
-    write('Carros: ', Carros).
+    write('Carros: '), write(Carros).
 
 three_different(Carros) :-
     length(Carros, L),
@@ -406,7 +267,6 @@ only_once(Carros, 0) :-
     L < 4.
 
 only_once([A, B, C, D | T], Counter) :-
-    (A #= 2 #/\ B #= 3 #/\ C #= 4 #/\ D #= 1) <=> Seq,
+    (A #= 2 #/\ B #= 3 #/\ C #= 4 #/\ D #= 1) #<=> Seq,
     Counter #= Counter1 + Seq,
-    only_once([B, C, D | T]).
-```
+    only_once([B, C, D | T], Counter1).

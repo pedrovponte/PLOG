@@ -1,8 +1,5 @@
-**1.**
+:-use_module(library(clpfd)).
 
-**a)**
-
-```pl
 quad_mag_3x3:-
     Quad = [R11,R12,R13,R21,R22,R23,R31,R32,R33],
     domain(Quad,1,9),
@@ -24,9 +21,9 @@ quad_mag_3x3:-
     format('~d ~d ~d \n', [R21, R22, R23]),
     format('~d ~d ~d \n', [R31, R32, R33]), 
     nl.
-```
 
-```pl
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 quad_mag_4x4:-
     Quad = [R11, R12, R13, R14, R21, R22, R23, R24, R31, R32, R33, R34, R41, R42, R43, R44],
     domain(Quad, 1, 16),
@@ -51,11 +48,9 @@ quad_mag_4x4:-
     format('~d ~d ~d ~d \n', [R31, R32, R33, R34]), 
     format('~d ~d ~d ~d \n', [R41, R42, R43, R44]),
     nl.
-```
 
-**b)**
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-```pl
 zebra :-
     Sol = [Nac, Ani, Beb, Cor, Tab],
     Nac = [Ing, Esp, Nor, Ucr, Por],
@@ -93,60 +88,8 @@ zebra :-
     write(Sol),
     nl.
 
-```
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-----
-
-**2.**
-
-**a)**
-
-```pl
-zebra :-
-    Sol = [Nac, Ani, Beb, Cor, Tab],
-    Nac = [Ing, Esp, Nor, Ucr, Por],
-    Ani = [Cao, Rap, Igu, Cav, Zeb],
-    Beb = [Sum, Cha, Caf, Lei, Agu],
-    Cor = [Verm, Verd, Bran, Amar, Azul],
-    Tab = [Che, Win, LS, SG, Mar],
-
-    List = [Ing, Esp, Nor, Ucr, Por, Cao, Rap, Igu, Cav, Zeb, Sum, Cha, Caf, Lei, Agu, Verm, Verd, Bran, Amar, Azul, Che, Win, LS, SG, Mar],
-
-    domain(List, 1, 5),
-
-    all_different(Nac),
-    all_different(Ani),
-    all_different(Beb),
-    all_different(Cor),
-    all_different(Tab),
-
-    Ing #= Verm,
-    Esp #= Cao,
-    Nor #= 1,
-    Amar #= Mar,
-    abs(Che-Rap) #= 1,
-    abs(Nor-Azul) #= 1,
-    Win #= Igu,
-    LS #= Sum,
-    Ucr #= Cha,
-    Por #= SG,
-    abs(Mar - Cav) #= 1,
-    Verd #= Caf,
-    Verd #= Bran + 1,
-    Lei #= 3,
-
-    labeling([], List),
-    write(Sol),
-    nl.
-```
-
-----
-
-**3.**
-
-**a)**
-
-```pl
 nqueens(Cols) :-
     Cols = [C1, C2, C3, C4],
     domain(Cols, 1, 4),
@@ -155,11 +98,9 @@ nqueens(Cols) :-
     C2 #\= C3 + 1, C2 #\= C3 - 1, C3 #\= C4 + 2, C3 #\= C4 - 2,
     C3 #\= C4 + 1, C3 #\= C4 - 1, 
     labeling([], Cols).
-```
 
-**b)**
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-```pl
 nqueens(N,Cols):-
     length(Cols,N),
     domain(Cols,1,N),
@@ -183,15 +124,9 @@ noattack(X,Y,K) :-
     X #\= Y,
     X + K #\= Y,
     X - K #\= Y.
-```
 
-----
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-**4.**
-
-**a)**
-
-```pl
 send(Vars) :-
     Vars = [S, E, N, D, M, O, R, Y],
     domain(Vars, 0, 9),
@@ -203,12 +138,10 @@ send(Vars) :-
     E + O + C2 #= N + C3 * 10,
     S + M + C3 #= O + C4 * 10,
     C4 #= M,
-    labelling([ff], Vars).
-```
+    labeling([ff], Vars).
 
-**b)**
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-```pl
 donald(Vars) :-
     Vars = [D, O, N, A, L, G, E, R, B, T],
     domain(Vars, 0, 9),
@@ -221,11 +154,9 @@ donald(Vars) :-
     D + G + C5 #= R + C6 * 10,
     C6 #= 0,
     labeling([ff], Vars).
-``` 
 
-**c)**
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-```pl
 cross(Vars) :-
     Vars = [C, R, O, S, A, D, N, G, E],
     domain(Vars, 0, 9),
@@ -237,17 +168,9 @@ cross(Vars) :-
     C + R + C4 #= A + C5 * 10,
     0 + 0 + C5 #= D,
     labeling([ff], Vars).
-```
 
-----
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-**5.**
-
-----
-
-**6.** 
-
-```pl
 sumProduct(Vars) :-
     Vars = [A, B, C],
     domain(Vars, 1, 1000000),
@@ -255,27 +178,10 @@ sumProduct(Vars) :-
     B #< C,
     B #> A,
     labeling([], Vars).
-```
 
-**7.**
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-```pl
-perus :-
+perus(PUP) :-
     A in 1..9,
     B in 0..9,
     PUP * 72 #= A * 1000 + 670 + B.
-```
-
-----
-
-**8.**
-
-```pl
-
-```
-
-**9.**
-
-```pl
-
-```
