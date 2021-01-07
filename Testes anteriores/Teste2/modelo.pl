@@ -24,6 +24,7 @@ test([X1,X2,X3|Xs]) :-
 p3(L1,L2) :-
     length(L1,N),
     length(L2,N),
+    length(Is, N),
     pos(L1,L2,Is),
     all_distinct(Is),
     test2(L2),
@@ -31,7 +32,7 @@ p3(L1,L2) :-
 
 pos([],_,[]).
 pos([X|Xs],L2,[I|Is]) :-
-    element(I,L2,X),
+    nth1(I,L2,X),
     pos(Xs,L2,Is).
 
 test2([_,_]).

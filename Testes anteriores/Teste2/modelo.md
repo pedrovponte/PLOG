@@ -1,4 +1,4 @@
-**1.** // Verificar a resposta desta
+**1.**
 
 ```pl
 :- use_module(library(lists)).
@@ -18,7 +18,9 @@ test([X1,X2,X3|Xs]) :-
     test([X2,X3|Xs]).
 ```
 
-O programa recebe duas listas e de seguida vai verificar se as duas listas introduzidas são iguais (contêm os mesmos elementos) e de seguida vai verificar se a segunda lista está ordenada por ordem  crescente ou decrescente. A sua eficiência não é máxima uma vez que falha no caso da lista só ter um elemento.
+O programa recebe uma lista L1 e, através do predicado gen,  vai criar uma lista L2 contendo os mesmos elementos que L1. De seguida, através do predicado test, vai ordenar a lista de modo a que cada elemento desta, excetuando o primeiro e o último, estejam entre dois números maiores que ele ou então entre dois números que serão menores que ele.
+Por exemplo, sendo L1 = [1,4,6,2,7,10,5] obtém-se L2 = [1,4,2,6,5,10,7], onde 4 > 1 e 4 > 2, 2 < 4 e 2 < 6, ...
+Quanto à eficiência, este programa é pouco eficiente pois cria uma lista, depois vai verificar se esta cumpre os critérios e, caso não cumpra, tem de voltar atrás para gerar uma nova para voltar a testar, e assim sucessivamente até se obter uma lista que cumpra as condições apresentadas (X1 < X2, X2 > X3; X1 > X2, X2 < X3).
 
 ----
 
@@ -51,11 +53,10 @@ As variáveis de domínio estão a ser instanciadas antes da fase de pesquisa e 
 **3.**
 
 ```pl
-:- use_module(library(clpfd)).
-
 p3(L1,L2) :-
     length(L1,N),
     length(L2,N),
+    length(Is, N),
     pos(L1,L2,Is),
     all_distinct(Is),
     test2(L2),
@@ -63,12 +64,12 @@ p3(L1,L2) :-
 
 pos([],_,[]).
 pos([X|Xs],L2,[I|Is]) :-
-    element(I,L2,X),
+    nth1(I,L2,X),
     pos(Xs,L2,Is).
 
 test2([_,_]).
 test2([X1,X2,X3|Xs]) :-
-    (X1 #< X2, X2 ># X3; X1 ># X2, X2 #< X3),
+    (X1 #< X2, X2 #> X3; X1 #> X2, X2 #< X3),
     test2([X2,X3|Xs]).
 ```
 
@@ -84,18 +85,18 @@ receitas(NOvos, TempoMax, OvosPorReceita, TempoPorReceita, OvosUsados, Receitas)
     domain(Receitas, 1, N),
     
     all_distinct(Receitas),
-    checkSum(Receitas, OvosPorReceita, TotalOvos),
+    checkSum(Receitas, OvosPorReceita, OvosUsados),
     checkSum(Receitas, TempoPorReceita, TempoTotal),
-    TotalOvos #< OvosUsados,
-    TempoTotal #< TempoMax,
-    labeling([maximize(OvosUsados)], Receitas). 
+    OvosUsados #=< NOvos,
+    TempoTotal #=< TempoMax,
+    labeling([maximize(OvosUsados)], Receitas).
     
 checkSum([], _, 0).
     
-checkSum([Id | T], OvosPorReceita, OvosUsados) :-
+checkSum([Id | T], OvosPorReceita, TotalOvos) :-
     checkSum(T, OvosPorReceita, SumOvosUsados),
     element(Id, OvosPorReceita, Ovos),
-    OvosUsados #= SumOvosUsados + Ovos.
+    TotalOvos #= SumOvosUsados + Ovos.
 ```
 
 ----
