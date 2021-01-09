@@ -1,11 +1,11 @@
 :- use_module(library(lists)).
 :- use_module(library(clpfd)).
 
-check([_],[]).
+check2([_], []).
 
-check([A,B|R], [X|Xs]) :-
+check2([A,B|R], [X|Xs]) :-
     A+B #= X,
-    check([B|R], Xs).
+    check2([B|R], Xs).
 
 prog2(N,M,L1,L2) :-
     length(L1,N),
@@ -13,8 +13,9 @@ prog2(N,M,L1,L2) :-
     length(L2,N1),
     domain(L1, 1, M),
     domain(L2, 1, M),
-    all_distinct(L1),
-    check(L1, L2),
+	append(L1, L2, L3),
+    all_distinct(L3),
+    check2(L1, L2),
     labeling([], L1).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -48,3 +49,47 @@ prepare([PH | PT], [PSH | PST], Current) :-
     PSH = Current-PH,
     Next is Current + 1,
     prepare(PT, PST, Next).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+optimal_skating_pairs(MenHeights, WomenHeights, Delta, Pairs) :-
+	length(MenHeights, MenLen),
+	length(WomenHeights, WomenLen),
+	
+	Comprimento = [MenLen, WomenLen],
+	maximum(MaxLength, Comprimento),
+	minimum(MinLength, Comprimento),
+	
+	length(MVars, MinLength),
+	domain(MVars, 1, MaxLength),
+	
+	length(WVars, MinLength),
+	domain(WVars, 1, MaxLength),
+	
+	all_distinct(MVars),
+	all_distinct(WVars),
+	
+	make_pairs(MenHeights, WomenHeights, Delta, Refe, MVars, WVars),
+	append(Refe, MVars, Vars1),
+	append(Vars1, WVars, Vars2),
+	sum(Refe, #=, Max),
+	labeling([maximize(Max)], [Max | Vars2]),
+	parse_values(Refe, MVars, WVars, Pairs).
+	
+
+make_pairs(_, _, _, [], [], []).	
+
+make_pairs(MenHeights, WomenHeights, Delta, [R | Refe], [M | MVars], [W | WVars]) :-
+	element(M, MenHeights, HeightM),
+	element(W, WomenHeights, HeightW),
+	((HeightM #>= HeightW) #/\ (HeightM	- HeightW #=< Delta)) #<=> R,
+	make_pairs(MenHeights, WomenHeights, Delta, Refe, MVars, WVars).	
+	
+parse_values([], [], [], []).
+
+parse_values([0 | Refe], [M | MVars], [W | WVars], Pairs) :-
+	parse_values(Refe, MVars, WVars, Pairs).
+	
+parse_values([1 | Refe], [M | MVars], [W | WVars], [P | Pairs]) :-
+	P = M - W,
+	parse_values(Refe, MVars, WVars, Pairs).
